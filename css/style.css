@@ -6,6 +6,19 @@ body{
     flex-direction: column;
 }
 
+.adiciona{
+    height: 30px;
+    width: 70px;
+    border: solid 3px black;
+    border-radius: 3px;
+    margin-top: 20px;
+}
+
+.adiciona:active{
+    background-color: lightblue;
+    transition: ease 1s;
+}
+
 .draggable{
     display: flex;
     position: relative;
@@ -19,6 +32,7 @@ body{
     min-width: 50px;
     min-height: 50px;
     background-size: 100% 100%;
+    z-index: 2;
 }
 
 .resizable{
@@ -46,12 +60,15 @@ body{
 }
 
 .debugger{
-    display: flex;
-    width: 90%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
     background: white;
     color: black;
     align-items: center;
     justify-content: center;
+    z-index: 1;
 }
 
 .cabecalho{
@@ -75,6 +92,9 @@ body{
     height: 100%;
     width: 180px;
     background-color: aquamarine;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
 }
 
 .middle__corpo{
@@ -88,7 +108,9 @@ body{
     height: 20px;
     width: 20px;
     background-color: darkgrey;
-    border: solid 1px black;
+    border: 0px;
+    background-size: cover;
+    background-image: url("../includes/img/pin.png");
 }
 
 .botao__solta:active{

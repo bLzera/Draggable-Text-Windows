@@ -1,79 +1,102 @@
-const div = document.querySelector(".draggable");
-const resizable = document.querySelector(".resizable");
-const cabeca = document.querySelector(".cabeca");
-const pe = document.querySelector(".pe");
 const debuga = document.getElementById("debugger");
 const imagem = document.getElementById("imagem");
-const cabecalho = document.querySelector(".cabecalho");
-const leftmenu = document.querySelector(".left__menu");
-const botaosolta = document.getElementById("botao__solta");
+const botaoadiciona = document.getElementById("adiciona");
+const middlecorpo = document.getElementById("middle_corpo");
 
+let offsetX, offsetY, img, estica, janelas, movel;
+janelas = 1;
 
-let offsetX, offsetY, img, movel, estica;
+var podeMover = {};
+var qualJanela = [];
 
-function defineDebugger (){
-    return div.offsetLeft.toString() + ' x, ' + div.offsetTop.toString() + ' y; </br> ' + div.style.width.toString() + ' width, ' + div.style.height.toString() + ' height;';    
+function defineDebugger(janela) {
+    return janela.offsetLeft.toString() + ' x, ' + janela.offsetTop.toString() + ' y; </br> ' + janela.style.width.toString() + ' width, ' + janela.style.height.toString() + ' height; </br> ' + janelas + ' janelas abertas;';
 }
 
-function moveWindow(){
+function moveWindow(janela) {
     document.querySelector("body").style.userSelect = "none";
-    debuga.innerHTML = defineDebugger();
+    debuga.innerHTML = defineDebugger(janela);
 }
 
 const move = (e) => {
-    if (movel) {
-    moveWindow();
-        div.style.left = e.clientX - offsetX >= 180 ? `${e.clientX - offsetX}px` : div.style.left;
-        div.style.top = e.clientY - offsetY >= 80 ? `${e.clientY - offsetY}px` : div.style.top;
+    if (podeMover[movel.getAttribute("id")]) {
+        moveWindow(movel);
+        movel.style.left = e.clientX - offsetX >= 180 ? `${e.clientX - offsetX}px` : movel.style.left;
+        movel.style.top = e.clientY - offsetY >= 80 ? `${e.clientY - offsetY}px` : movel.style.top;
     }
 };
 
 const resize = (e) => {
-    if (estica){
-    moveWindow();
-        div.style.width = `${e.clientX - offsetX}px`;
-        div.style.height = `${e.clientY - offsetY}px`;
+    if (podeMover[movel.getAttribute("id")]) {
+        moveWindow(movel);
+        movel.style.width = `${e.clientX - offsetX}px`;
+        movel.style.height = `${e.clientY - offsetY}px`;
     }
-}
+};
 
-botaosolta.addEventListener("click", (e) => {
-    if (movel){
-        movel = 0;
-        estica = 0;
-        return;
-    } 
-    div.style.position = "absolute";
-    movel = 1;
-    estica = 1;
-})
+botaoadiciona.addEventListener("click", () => {
+    const newWindowId = `draggable${janelas}`;
+    middlecorpo.innerHTML =
+        `<div class="draggable" id="${newWindowId}">
+            <div class="cabeca" id="cabeca${janelas}">
+                <button class="botao__solta" id="botao__solta${janelas}"></button>
+            </div>
+            <div class="pe" id="pe${janelas}"></div>
+        </div>` + middlecorpo.innerHTML;
 
-cabeca.addEventListener("mousedown", (e) => {
+    const janela = document.getElementById(newWindowId);
+    const cabeca = document.getElementById(`cabeca${janelas}`);
+    const pe = document.getElementById(`pe${janelas}`);
+    const botaosolta = document.getElementById(`botao__solta${janelas}`);
 
-    offsetX = e.clientX - div.offsetLeft;
-    offsetY = e.clientY - div.offsetTop;    
-    document.addEventListener("mousemove", move);
+    podeMover[newWindowId] = 0;
+    qualJanela.push(newWindowId);
 
-});
 
-pe.addEventListener("mousedown", (e) => {
+    cabeca.addEventListener("mousedown", (e) => {
+        let window = document.getElementById(qualJanela[parseInt(cabeca.getAttribute("id").replace("cabeca", "")) - 1])
+        offsetX = e.clientX - window.offsetLeft;
+        offsetY = e.clientY - window.offsetTop;
 
-    offsetX = (e.clientX) - div.offsetWidth;
-    offsetY = (e.clientY) - div.offsetHeight;    
-    document.addEventListener("mousemove", resize);
+        movel = window;
+        document.addEventListener("mousemove", move);
+    });
 
-})
+    pe.addEventListener("mousedown", (e) => {
+        let window = document.getElementById(qualJanela[parseInt(pe.getAttribute("id").replace("pe", "")) - 1])        
+        offsetX = e.clientX - window.offsetWidth;
+        offsetY = e.clientY - window.offsetHeight;
 
-imagem.addEventListener("change", (e) => {
-    img = e.target.files[0];
-    div.style.backgroundImage = `url(${URL.createObjectURL(img)})`;
-    console.log(`url(${URL.createObjectURL(img)})`);
+        movel = window;
+        estica = 1;
+        document.addEventListener("mousemove", resize);
+    });
+
+    botaosolta.addEventListener("mousedown", (e) => {
+        console.log(qualJanela[parseInt(botaosolta.getAttribute("id").replace("botao__solta", "")) - 1]);
+        let window = document.getElementById(toString(qualJanela[parseInt(botaosolta.getAttribute("id").replace("botao__solta", "")) - 1]))                
+        console.log(window);
+        if (podeMover[window.getAttribute("id")] == 0) {
+            window.style.position = "absolute";
+            podeMover[window.getAttribute("id")] = 1;
+        } else {
+            podeMover[window.getAttribute("id")] = 0;
+        }
+    });
+
+    janelas++;
 });
 
 document.addEventListener("mouseup", () => {
     document.removeEventListener("mousemove", move);
     document.removeEventListener("mousemove", resize);
-
     document.querySelector("body").style.userSelect = "auto";
 });
 
-console.log(cabecalho.style.height)
+imagem.addEventListener("change", (e) => {
+    img = e.target.files[0];
+    if (movel) {
+        movel.style.backgroundImage = `url(${URL.createObjectURL(img)})`;
+        console.log(`url(${URL.createObjectURL(img)})`);
+    }
+});
