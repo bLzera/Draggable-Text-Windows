@@ -26,6 +26,7 @@ body{
     width: 200px;
     border: solid 5px black;
     border-radius: 2px;
+    border-bottom-width: 20px;
     flex-direction: column;
     justify-content: space-between;
     align-items: end;
@@ -53,7 +54,8 @@ body{
 }
 
 .pe{
-    background-color: purple;
+    background-image: url('../includes/img/linhas_diagonais.png');
+    background-size: 750% 750%;
     width: 20px;
     height: 20px;
     cursor: nwse-resize;
@@ -114,5 +116,13 @@ body{
 }
 
 .botao__solta:active{
+    background-color: black;
+}
+
+.footer__draggable{
+    display: flex;
+    flex-direction: row-reverse;
+    height: 20px;
+    min-height: 20px;
     background-color: black;
 }

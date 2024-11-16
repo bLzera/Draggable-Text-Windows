@@ -10,7 +10,7 @@ var podeMover = {};
 var qualJanela = [];
 
 function defineDebugger(janela) {
-    return janela.offsetLeft.toString() + ' x, ' + janela.offsetTop.toString() + ' y; </br> ' + janela.style.width.toString() + ' width, ' + janela.style.height.toString() + ' height; </br> ' + janelas + ' janelas abertas;';
+    return janela.offsetLeft.toString() + ' x, ' + janela.offsetTop.toString() + ' y; </br> ' + janela.style.width.toString() + ' width, ' + janela.style.height.toString() + ' height; </br> ' + `${janelas - 1}` + ' janelas abertas;';
 }
 
 function moveWindow(janela) {
@@ -36,15 +36,20 @@ const resize = (e) => {
 
 botaoadiciona.addEventListener("click", () => {
     const newWindowId = `draggable${janelas}`;
-    middlecorpo.innerHTML =
-        `<div class="draggable" id="${newWindowId}">
-            <div class="cabeca" id="cabeca${janelas}">
-                <button class="botao__solta" id="botao__solta${janelas}"></button>
-            </div>
-            <div class="pe" id="pe${janelas}"></div>
-        </div>` + middlecorpo.innerHTML;
+    
+    const novaJanelaHTML = `
+    <div class="draggable" id="${newWindowId}">
+        <div class="cabeca" id="cabeca${janelas}">
+            <button class="botao__solta" id="botao__solta${janelas}"></button>
+        </div>
+        <div class="pe" id="pe${janelas}"></div>
+    </div>`;
+    middlecorpo.insertAdjacentHTML('afterbegin', novaJanelaHTML);
 
     const janela = document.getElementById(newWindowId);
+
+    janela.style.zIndex = `${janelas+1}`;
+
     const cabeca = document.getElementById(`cabeca${janelas}`);
     const pe = document.getElementById(`pe${janelas}`);
     const botaosolta = document.getElementById(`botao__solta${janelas}`);
@@ -74,7 +79,7 @@ botaoadiciona.addEventListener("click", () => {
 
     botaosolta.addEventListener("mousedown", (e) => {
         console.log(qualJanela[parseInt(botaosolta.getAttribute("id").replace("botao__solta", "")) - 1]);
-        let window = document.getElementById(toString(qualJanela[parseInt(botaosolta.getAttribute("id").replace("botao__solta", "")) - 1]))                
+        let window = document.getElementById(`${qualJanela[parseInt(botaosolta.getAttribute("id").replace("botao__solta", "")) - 1]}`)                
         console.log(window);
         if (podeMover[window.getAttribute("id")] == 0) {
             window.style.position = "absolute";
@@ -83,7 +88,7 @@ botaoadiciona.addEventListener("click", () => {
             podeMover[window.getAttribute("id")] = 0;
         }
     });
-
+    
     janelas++;
 });
 
