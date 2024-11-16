@@ -26,7 +26,7 @@ body{
     width: 200px;
     border: solid 5px black;
     border-radius: 2px;
-    border-bottom-width: 20px;
+    border-bottom-width: 0;
     flex-direction: column;
     justify-content: space-between;
     align-items: end;
@@ -34,6 +34,7 @@ body{
     min-height: 50px;
     background-size: 100% 100%;
     z-index: 2;
+    background-color: white;
 }
 
 .resizable{
@@ -54,8 +55,6 @@ body{
 }
 
 .pe{
-    background-image: url('../includes/img/linhas_diagonais.png');
-    background-size: 750% 750%;
     width: 20px;
     height: 20px;
     cursor: nwse-resize;
@@ -76,8 +75,8 @@ body{
 .cabecalho{
     display: flex;
     width: 100%;
-    min-height: 80px;
-    height: 80px;
+    min-height: 50px;
+    height: 50px;
     background-color: silver;
     padding: 0;
 }
@@ -124,5 +123,6 @@ body{
     flex-direction: row-reverse;
     height: 20px;
     min-height: 20px;
+    width: 100%;
     background-color: black;
 }
