@@ -9,11 +9,28 @@
 <body>
     <div class="corpo">
         <div class="left__menu" id="left__menu">
-            <input class="imagem" type="file" id="imagem" accept="image/*"></input>
-            <button class="adiciona" id="adiciona">Anota!</button>
+            <div class="left__menu__container" id="temas">
+                <h3 class="titulo__section" id="titulo__temas">APARÊNCIA</h3>
+                <div class="botoes__temas" id="botoes__temas">
+                    <button class="botao__temas" id="temas__branco"></button>
+                    <button class="botao__temas" id="temas__escuro"></button>                
+                </div>
+            </div>
+            <div class="left__menu__container" id="opcoes">        
+                <h3 class="titulo__section" id="titulo__temas">JANELAS</h3>                
+                <div class="botoes__opcoes" id="botoes__opcoes">
+                    <button class="adiciona" id="adiciona">Anota aí!</button>
+                </div>
+            </div>
+            <div class="left__menu__container" id="statistics">
+                <h3 class="titulo__section" id="titulo__temas">ESTATÍSTICAS</h3>                
+                <div class="campo__estatisticas" id="campo__estatisticas">
+                    <div class="debugger" id="debugger"></div>                    
+                </div>                
+            </div>
         </div>
         <div class="middle__corpo" id="middle_corpo">
-            <div class="debugger" id="debugger">ta aqui</div>
+            <div class="middle__corpo__background" id="middle__corpo__background"></div>
         </div>
     </div>
 </body>
