@@ -7,7 +7,16 @@
     <title></title>
 </head>
 <body>
-    <div class="corpo">
+    <div class="corpo__background" id="corpo__background">
+        <div class="confirma__fecha__janela" id="confirma__fecha__janela">
+            <header class="header__confirma__fecha__janela" id="header__confirma__fecha__janela"></header>
+            <div class="botoes__confirma__fecha__janela" id="botoes__confirma__fecha__janela">
+                <button class="botao__confirma__fecha__janela" id="botao__confirma__fecha__janela__sim">Sim!</button>
+                <button class="botao__confirma__fecha__janela" id="botao__confirma__fecha__janela__nao">Não!</button>
+            </div>
+        </div>
+    </div>
+    <div class="corpo" id="corpo">
         <div class="left__menu" id="left__menu">
             <div class="left__menu__container" id="temas">
                 <h3 class="titulo__section" id="titulo__temas">APARÊNCIA</h3>
@@ -19,7 +28,7 @@
             <div class="left__menu__container" id="opcoes">        
                 <h3 class="titulo__section" id="titulo__temas">JANELAS</h3>                
                 <div class="botoes__opcoes" id="botoes__opcoes">
-                    <button class="adiciona" id="adiciona">Anota aí!</button>
+                    <button class="adiciona" id="adiciona"><i class="fa-solid fa-square-plus"></i></button>
                 </div>
             </div>
             <div class="left__menu__container" id="statistics">
@@ -34,5 +43,6 @@
         </div>
     </div>
 </body>
-<script src="util/script.js"></script>    
+<script src="util/script.js"></script>   
+<script src="https://kit.fontawesome.com/7f7b8cb281.js" crossorigin="anonymous"></script> 
 </html>

@@ -5,8 +5,13 @@ const background = document.getElementById("middle__corpo__background");
 const root = document.querySelector(":root");
 const botaotemaescuro = document.getElementById("temas__escuro");
 const botaotemaclaro = document.getElementById("temas__branco");
+const corpobackground = document.getElementById("corpo__background");
+const corpo = document.getElementById("corpo");
+const confirmafechajanela = document.getElementById("confirma__fecha__janela");
+const botaoconfirmafechajanela = document.getElementById("botao__confirma__fecha__janela__sim");
+const botaorecusafechajanela = document.getElementById("botao__confirma__fecha__janela__nao");
 
-let offsetX, offsetY, img, estica, janelas, movel;
+let offsetX, offsetY, img, estica, janelas, movel, mainWindow;
 janelas = 1;
 
 var podeMover = {}; 
@@ -60,6 +65,7 @@ const defineTemaClaro = (e) => {
     root.style.setProperty("--active__theme__windows__outline", 					"var(--white__theme__windows__outline)");
     root.style.setProperty("--active__theme__left__menu__background", 				"var(--white__theme__left__menu__background)");
     root.style.setProperty("--active__theme__left__menu__container__background", 	"var(--white__theme__left__menu__container__background)");
+    root.style.setProperty("--active__theme__window__header__text", 	            "var(--white__theme__window__header__text)");
 }
 
 const defineTemaEscuro = (e) => {
@@ -72,12 +78,11 @@ const defineTemaEscuro = (e) => {
     root.style.setProperty("--active__theme__windows__outline", 					"var(--black__theme__windows__outline)");
     root.style.setProperty("--active__theme__left__menu__background", 				"var(--black__theme__left__menu__background)");
     root.style.setProperty("--active__theme__left__menu__container__background", 	"var(--black__theme__left__menu__container__background)");
+    root.style.setProperty("--active__theme__window__header__text", 	            "var(--black__theme__window__header__text)");    
 }
 
 botaotemaescuro.addEventListener("click", defineTemaEscuro);
-
 botaotemaclaro.addEventListener("click", defineTemaClaro);
-
 botaoadiciona.addEventListener("click", () => {
     const newWindowId = `draggable${janelas}`;
 
@@ -87,9 +92,9 @@ botaoadiciona.addEventListener("click", () => {
     const novaJanela = `
     <div class="draggable" id="${newWindowId}">
         <div class="cabeca" id="cabeca${janelas}">
-            <button class="botao__solta" id="botao__solta${janelas}"></button>        
+            <button class="botao__solta" id="botao__solta${janelas}"><i class="fa-solid fa-thumbtack"></i></button>        
             <label contenteditable="false" type="text" class="titulo__janela" id="titulo__janela${janelas}">JANELA ${janelas}</label>
-            <button class="botao__fecha" id="botao__fecha${janelas}"></button>
+            <button class="botao__fecha" id="botao__fecha${janelas}"><i class="fa-solid fa-x"></i></button>
         </div>
         <div class="corpo__janela" id="corpo__janela${janelas}">
             <label contenteditable="false" class="conteudo__draggable" id="conteudo__draggable${janelas}" contenteditable="false"></label>
@@ -111,6 +116,19 @@ botaoadiciona.addEventListener("click", () => {
     const conteudo = document.getElementById(`conteudo__draggable${janelas}`);
     const corpojanela = document.getElementById(`corpo__janela${janelas}`);
 
+    const fechaJanela = (e) => {
+        corpobackground.style.zIndex = 1;
+        corpo.style.zIndex = 2;
+        confirmafechajanela.style.display = "none";
+        mainWindow.outerHTML = "";    
+    };
+
+    const deixaJanela = (e) => {
+        corpobackground.style.zIndex = 1;
+        corpo.style.zIndex = 2;
+        confirmafechajanela.style.display = "none";        
+    }
+
     janela.style.zIndex = `${janelas+1}`;
 
     corpojanela.addEventListener("dblclick", (e) => {        
@@ -130,10 +148,6 @@ botaoadiciona.addEventListener("click", () => {
         }
     });
 
-    conteudo.addEventListener("focus", (e) => {
-        janela.setAttribute("outline", "double 5px var(--white__theme__buttons__background)");
-    });    
-
     conteudo.addEventListener("focusout", (e) => {
         conteudo.setAttribute("contenteditable", "false");        
         conteudo.style.userSelect = "none";            
@@ -141,7 +155,14 @@ botaoadiciona.addEventListener("click", () => {
     });       
 
     botaofecha.addEventListener("mouseup", (e) => {
-        janela.outerHTML = "";
+        //janela.outerHTML = "";
+        corpobackground.style.zIndex = 2;
+        corpo.style.zIndex = 1;
+        confirmafechajanela.style.display = "flex";
+        confirmafechajanela.style.zIndex = 3;
+        document.getElementById("header__confirma__fecha__janela").innerHTML = `<B>DESEJA FECHAR A JANELA "${titulo.innerHTML}"?</B>`;
+        botaoconfirmafechajanela.addEventListener("click", fechaJanela);
+        botaorecusafechajanela.addEventListener("click", deixaJanela);
     });
 
     barrabaixa.addEventListener("mousedown", (e) => {
@@ -199,7 +220,7 @@ botaoadiciona.addEventListener("click", () => {
             titulo.style.cursor = "move";
             barrabaixa.style.cursor = "ns-resize";
             pe.style.cursor = "nwse-resize";
-            botaosolta.style.backgroundColor = "var(--white__theme__windows__header)";            
+            botaosolta.style.backgroundColor = "var(--active__theme__windows__header)";            
             botaosolta.style.border = "0";            
             podeMover[janela.getAttribute("id")] = 1;
         } else {
@@ -207,13 +228,14 @@ botaoadiciona.addEventListener("click", () => {
             titulo.style.cursor = "pointer";
             barrabaixa.style.cursor = "auto";
             pe.style.cursor = "auto";
-            botaosolta.style.backgroundColor = "var(--white__theme__windows__button__active)";
-            botaosolta.style.border = "solid 1px var(--white__theme__borders)";
+            botaosolta.style.backgroundColor = "var(--active__theme__windows__button__active)";
+            botaosolta.style.border = "solid 1px var(--active__theme__borders)";
             podeMover[janela.getAttribute("id")] = 0;            
         }
     });
 
     janela.addEventListener("mousedown", () => {
+        mainWindow = janela;
         let max = 0;
         janela.style.outline = "solid 3px var(--active__theme__windows__outline)";        
         let divs = document.querySelectorAll(".draggable");
@@ -250,15 +272,5 @@ document.addEventListener("mouseup", () => {
     document.removeEventListener("mousemove", move);
     document.removeEventListener("mousemove", resize);
     document.removeEventListener("mousemove", resizedown);
-    /*document.removeEventListener("mousedown", defineTemaClaro);
-    document.removeEventListener("mousedown", defineTemaEscuro);*/
     document.querySelector("body").style.userSelect = "auto";
 });
-
-/*imagem.addEventListener("change", (e) => {
-    img = e.target.files[0];
-    if (movel) {
-        movel.style.backgroundImage = `url(${URL.createObjectURL(img)})`;
-        console.log(`url(${URL.createObjectURL(img)})`);
-    }
-});*/
